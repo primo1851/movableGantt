@@ -1,0 +1,14 @@
+development:
+  adapter: mysql2
+  database: redmine
+  host: redmine_test_db_1
+  username: user
+  password: yourpassword
+  encoding: utf8
+production:
+  adapter: mysql2
+  database: redmine
+  host: redmine_db
+  username: user
+  password: yourpassword
+  encoding: utf8
