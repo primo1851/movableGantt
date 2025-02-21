@@ -8,5 +8,4 @@ Redmine::Plugin.register :movableGantt do
 end
 
 
-Rails.application.config.assets.precompile += %w( custom.js custom.css )
-require_dependency 'my_plugin/hooks'
+Rails.application.config.assets.precompile += %w( gantt.js application.css )
