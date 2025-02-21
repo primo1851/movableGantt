@@ -355,10 +355,11 @@ initGanttDnD = function () {
         var url = target.attr('data-url-change-duration');
         var object = JSON.parse(target.attr('data-object'));
         var startLeft = target[0].startLeft;
-        var relative_days = Math.floor((ui.position.left - startLeft) / grid_x);
+        var relative_days = Math.ceil((ui.position.left - startLeft) / grid_x) + 1;
         if (relative_days == 0) {
           return;
         }
+
         var start_date = new Date(object.start_date);
         start_date.setDate(start_date.getDate() + relative_days);
         start_date =
@@ -402,6 +403,7 @@ initGanttDnD = function () {
             lock_version: object.lock_version,
           },
         });
+
         $.ajax({
           type: 'PUT',
           url: url,
@@ -418,95 +420,83 @@ initGanttDnD = function () {
               $(this).remove();
             });
           }
-          ui.draggable.animate({ 'left': ui.draggable[0].startLeft }, 'fast');
         });
       }
     });
-    $(".leaf .task_todo").resizable({
-      handles: "e, w",
-      start: function (event, ui) {
-        console.log('start', ui.size.width);
 
-      },
-      stop: function (event, ui) {
-        var target = $(ui.originalElement);
-        console.log('end', ui.size.width);
-        var url = target.attr('data-url-change-duration');
-        var object = JSON.parse(target.attr('data-object'));
-        var relative_days = Math.ceil((ui.size.width - ui.originalSize.width) / grid_x) + 1;
-        if (relative_days == 0) {
-          return;
-        }
-        var start_date = object.start_date;
-
-        var due_date = object.due_date;
-        if (object.due_date != null) {
-          due_date = new Date(object.due_date);
-          due_date.setDate(due_date.getDate() + relative_days);
-          due_date =
-            [
-              due_date.getFullYear(),
-              ('0' + (due_date.getMonth() + 1)).slice(-2),
-              ('0' + due_date.getDate()).slice(-2),
-            ].join('-');
-        }
-        $('#selected_c option:not(:disabled)').prop('selected', true);
-        var form = $('#query_form').serializeArray();
-        var json_param = {};
-        form.forEach(function (data) {
-          var key = data.name;
-          var value = data.value;
-          if (/\[\]$/.test(key)) {
-            if (!json_param.hasOwnProperty(key)) {
-              json_param[key] = [];
-            }
-            json_param[key].push(value);
-          }
-          else {
-            json_param[key] = value;
-          }
-        });
-        console.log('start', start_date);
-        console.log('due', due_date);
-
-        $('#selected_c option:not(:disabled)').prop('selected', false);
-        Object.assign(json_param, {
-          change_duration: {
-            start_date: start_date,
-            due_date: due_date,
-            lock_version: object.lock_version,
-          },
-        });
-        $.ajax({
-          type: 'PUT',
-          url: url,
-          data: json_param,
-        }).done(function (data) {
-          drawGanttHandler();
-          initGanttDnD();
-        }).fail(function (jqXHR) {
-          var contents = $('<div>' + jqXHR.responseText + '</div>');
-          var error_message = contents.find('p#errorExplanation');
-          if (error_message.length) {
-            $('div#content h2:first-of-type').after(error_message);
-            $('p#errorExplanation').hide('fade', {}, 3000, function () {
-              $(this).remove();
-            });
-          }
-          ui.draggable.animate({ 'left': ui.draggable[0].startLeft }, 'fast');
-        });
-      }
-    })
 
   }
-  $(".task_todo").resizable({
+  $(".leaf .task_todo").resizable({
     handles: "e, w",
     start: function (event, ui) {
-      $(this).css('cursor', 'ew-resize');
     },
     stop: function (event, ui) {
-      $(this).css('cursor', 'auto');
+      var target = $(ui.originalElement);
+      var url = target.attr('data-url-change-duration');
+      var object = JSON.parse(target.attr('data-object'));
+      var relative_days = Math.ceil((ui.size.width - ui.originalSize.width) / grid_x) + 1;
+      if (relative_days == 0) {
+        return;
+      }
+      var start_date = object.start_date;
+
+      var due_date = object.due_date;
+      if (object.due_date != null) {
+        due_date = new Date(object.due_date);
+        due_date.setDate(due_date.getDate() + relative_days);
+        due_date =
+          [
+            due_date.getFullYear(),
+            ('0' + (due_date.getMonth() + 1)).slice(-2),
+            ('0' + due_date.getDate()).slice(-2),
+          ].join('-');
+      }
+      $('#selected_c option:not(:disabled)').prop('selected', true);
+      var form = $('#query_form').serializeArray();
+      var json_param = {};
+      form.forEach(function (data) {
+        var key = data.name;
+        var value = data.value;
+        if (/\[\]$/.test(key)) {
+          if (!json_param.hasOwnProperty(key)) {
+            json_param[key] = [];
+          }
+          json_param[key].push(value);
+        }
+        else {
+          json_param[key] = value;
+        }
+      });
+      console.log('start', start_date);
+      console.log('due', due_date);
+
+      $('#selected_c option:not(:disabled)').prop('selected', false);
+      Object.assign(json_param, {
+        change_duration: {
+          start_date: start_date,
+          due_date: due_date,
+          lock_version: object.lock_version,
+        },
+      });
+      console.log(json_param);
+      $.ajax({
+        type: 'PUT',
+        url: url,
+        data: json_param,
+      }).done(function (data) {
+        drawGanttHandler();
+        initGanttDnD();
+      }).fail(function (jqXHR) {
+        var contents = $('<div>' + jqXHR.responseText + '</div>');
+        var error_message = contents.find('p#errorExplanation');
+        if (error_message.length) {
+          $('div#content h2:first-of-type').after(error_message);
+          $('p#errorExplanation').hide('fade', {}, 3000, function () {
+            $(this).remove();
+          });
+        }
+      });
     }
-  });
+  })
 };
 $(document).ready(initGanttDnD);
