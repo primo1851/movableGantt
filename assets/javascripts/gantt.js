@@ -438,7 +438,7 @@ initGanttDnD = function () {
           return;
         }
         var start_date = object.start_date;
-    
+
         var due_date = object.due_date;
         if (object.due_date != null) {
           due_date = new Date(object.due_date);
@@ -446,8 +446,8 @@ initGanttDnD = function () {
           due_date =
             [
               due_date.getFullYear(),
-            ('0' + (due_date.getMonth() + 1)).slice(-2),
-            ('0' + due_date.getDate()).slice(-2),
+              ('0' + (due_date.getMonth() + 1)).slice(-2),
+              ('0' + due_date.getDate()).slice(-2),
             ].join('-');
         }
         $('#selected_c option:not(:disabled)').prop('selected', true);
@@ -497,7 +497,7 @@ initGanttDnD = function () {
         });
       }
     })
-    
+
   }
   $(".task_todo").resizable({
     handles: "e, w",

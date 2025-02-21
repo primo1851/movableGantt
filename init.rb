@@ -1,3 +1,7 @@
+
+require 'redmine'
+require_relative 'lib/movableGantt/hooks'
+
 Redmine::Plugin.register :movableGantt do
   name 'Movable Gantt plugin'
   author 'Luiza Primo'
@@ -8,4 +12,4 @@ Redmine::Plugin.register :movableGantt do
 end
 
 
-Rails.application.config.assets.precompile += %w( gantt.js application.css )
+Rails.application.config.assets.precompile += %w( stylesheets/application.css javascripts/gantt.js )

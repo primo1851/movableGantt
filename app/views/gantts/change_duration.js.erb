@@ -38,7 +38,7 @@ gantt.query = @query
   gantt.instance_variable_set(:@lines, '')
   gantt.render_object_row(
     obj,
-    {format: :html, only: :lines, zoom: 2 ** gantt.zoom, top: 0, top_increment: 20}
+    {format: :html, only: :lines, zoom: 2 ** gantt.zoom, top: 0}
   )
   todo_content = Nokogiri::HTML.parse(gantt.instance_variable_get(:@lines))
   todo_content = todo_content.xpath(

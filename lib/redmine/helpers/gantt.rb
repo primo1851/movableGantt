@@ -613,7 +613,7 @@ module Redmine
         pdf.SetTextColor(0)
         pdf.RDMCell(subject_width + g_width - 15, headers_height, "", 1)
         # Tasks
-        top = headers_height + y_start
+        top = 0
         options = {
           :top => top,
           :zoom => zoom,
@@ -621,7 +621,7 @@ module Redmine
           :g_width => g_width,
           :indent => 0,
           :indent_increment => 5,
-          :top_increment => 5,
+          :top_increment => 1,
           :format => :pdf,
           :pdf => pdf
         }
@@ -657,7 +657,7 @@ def duration(issue, view, query)
         draw_objs.each do |obj|
           @number_of_rows = 0
           @lines = +''
-          render_object_row(obj, {format: :html, only: :lines, zoom: 2 ** @zoom, top: 0, top_increment: 20})
+          render_object_row(obj, {format: :html, only: :lines, zoom: 2 ** @zoom, top: 0, top_increment: 5})
           todo_content = Nokogiri::HTML.parse(@lines)
           todo_context = todo_content.xpath(
             "//div[contains(@class, 'task') and contains(@class, 'line')]/*"
@@ -917,7 +917,7 @@ def duration(issue, view, query)
         if coords[:bar_start] && coords[:bar_end]
           width = coords[:bar_end] - coords[:bar_start]
           style = +""
-          style << "top:#{params[:top]}px;"
+          style << "top:0px;"
           style << "left:#{coords[:bar_start]}px;"
           style << "width:#{width}px;"
           html_id =

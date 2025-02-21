@@ -1660,8 +1660,9 @@ td.gantt_selected_column .gantt_hdr,.gantt_selected_column_container {
   width: 49px;
 }
 
+
 .task {
-  position: static;
+  position: absolute;
   height:10px;
   font-size:0.8em;
   color:#888;
@@ -1670,10 +1671,11 @@ td.gantt_selected_column .gantt_hdr,.gantt_selected_column_container {
   line-height:16px;
   white-space:nowrap;
 }
-.task.line {left: 0;  margin-top: 100px; }
+.task.label {width:100%; }
+.task.line { left: 0;  }
 .task.label.project, .task.label.version { font-weight: bold; }
 .task div.tooltip:hover span.tip { font-size: inherit; }
-.task .task_todo .label { font-size: inherit;  }
+.task .task_todo .label { font-size: inherit; }
 .task.project .task_todo .label { margin-top: -4px; }
 .task.version .task_todo .label { margin-top: -3px; }
 .task_late { background:#f66 url(../images/task_late.png); border: 1px solid #f66; }
@@ -1694,7 +1696,6 @@ td.gantt_selected_column .gantt_hdr,.gantt_selected_column_container {
 .parent .task_late, .parent .task_done { height: 5px; }
 .version.task_todo { background:#fff url(../images/milestone_todo.png); border: 1px solid #fff; height: 2px; margin-top: 3px;}
 .parent .marker {
-.version.marker { background-image:url(../images/version_marker.png); background-repeat: no-repeat; border: 0; margin-left: -4px; margin-top: 1px; }
   background: #888;
   display: inline-block;
   position: absolute;
@@ -1762,6 +1763,7 @@ td.gantt_selected_column .gantt_hdr,.gantt_selected_column_container {
   border: 5px solid transparent;
   border-top-color: blue;
 }
+
 
 .version-behind-schedule a, .issue-behind-schedule a {color: #f66914;}
 .version-overdue a, .issue-overdue a, .project-overdue a {color: #f00;}
